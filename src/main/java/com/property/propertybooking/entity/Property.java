@@ -1,9 +1,15 @@
 package com.property.propertybooking.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "properties")
 public class Property {
@@ -46,5 +52,7 @@ public class Property {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // getters and setters
+    @OneToMany(mappedBy = "property")
+    private List<PropertyImage> images;
+
 }
