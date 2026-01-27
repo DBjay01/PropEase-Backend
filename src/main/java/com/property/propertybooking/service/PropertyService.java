@@ -1,5 +1,7 @@
 package com.property.propertybooking.service;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.property.propertybooking.dto.PropertyRequest;
@@ -15,6 +17,9 @@ public interface PropertyService {
     Property updateProperty(Long id, Property updatedData);
 
     void deleteProperty(Long id);
+//    
+//    void uploadPropertyImages(Long propertyId, MultipartFile[] files);
     
-    void uploadPropertyImages(Long propertyId, MultipartFile[] files);
+    public List<PropertyResponse> getAllProperties();
+    
 }

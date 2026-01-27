@@ -1,5 +1,7 @@
 package com.property.propertybooking.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.property.propertybooking.dto.PropertyRequest;
 import com.property.propertybooking.dto.PropertyResponse;
 import com.property.propertybooking.entity.Property;
+import com.property.propertybooking.service.PropertyImageService;
 import com.property.propertybooking.service.PropertyService;
 
 import jakarta.validation.Valid;
@@ -27,9 +30,11 @@ import jakarta.validation.Valid;
 public class PropertyController {
 
     private final PropertyService propertyService;
+    private final PropertyImageService imageService;
 
-    public PropertyController(PropertyService propertyService) {
+    public PropertyController(PropertyService propertyService , PropertyImageService imageService) {
         this.propertyService = propertyService;
+        this.imageService = imageService;
     }
 
     // CREATE PROPERTY
@@ -45,6 +50,11 @@ public class PropertyController {
     @GetMapping("/{id}")
     public ResponseEntity<PropertyResponse> getPropertyById(@PathVariable Long id) {
         return ResponseEntity.ok(propertyService.getPropertyById(id));
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<PropertyResponse>> getAllProperties() {
+        return ResponseEntity.ok(propertyService.getAllProperties());
     }
 
     // UPDATE PROPERTY
@@ -64,14 +74,38 @@ public class PropertyController {
         return ResponseEntity.noContent().build(); // 204
     }
     
-    @PostMapping("/{propertyId}/images")
-    public ResponseEntity<String> uploadImages(
-            @PathVariable Long propertyId,
-            @RequestParam("files") MultipartFile[] files
-    ) {
-        propertyService.uploadPropertyImages(propertyId, files);
-        return ResponseEntity.ok("Images uploaded successfully");
+    @PostMapping("/{id}/images")
+    public ResponseEntity<List<String>> uploadImages(
+            @PathVariable Long id,
+            @RequestParam("images") MultipartFile[] files) {
+
+        List<String> urls = imageService.uploadAndSaveImages(id, files);
+        return ResponseEntity.ok(urls);
     }
+    
+//    @PostMapping("/{propertyId}/images")
+//    public ResponseEntity<String> uploadImages(
+//            @PathVariable Long propertyId,
+//            @RequestParam("files") MultipartFile[] files
+//    ) {
+//        propertyService.uploadPropertyImages(propertyId, files);
+//        return ResponseEntity.ok("Images uploaded successfully");
+//    }
+//    
+//    @PostMapping("/{id}/image")
+//    public ResponseEntity<List<String>> uploadImages(
+//            @PathVariable Long id,
+//            @RequestParam("images") List<MultipartFile> files) {
+// 
+//        List<String> urls = files.stream()
+//                .map(file -> cloudinaryService.uploadImage(file, id))
+//                .collect(Collectors.toList());
+//
+//        return ResponseEntity.ok(urls);
+//    }
+    
+    
+
 }
 
 

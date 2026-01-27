@@ -1,6 +1,7 @@
 package com.property.propertybooking.service;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,16 +22,13 @@ public class PropertyServiceImpl implements PropertyService {
     private final PropertyRepository propertyRepository;
     private final UserRepository userRepository;
     private final PropertyImageRepository propertyImageRepository;
-    private final FirebaseStorageService firebaseStorageService;
 
     public PropertyServiceImpl(PropertyRepository propertyRepository,
                                UserRepository userRepository,
-                               PropertyImageRepository propertyImageRepository,
-                               FirebaseStorageService firebaseStorageService) {
+                               PropertyImageRepository propertyImageRepository) {
         this.propertyRepository = propertyRepository;
         this.userRepository = userRepository;
         this.propertyImageRepository = propertyImageRepository;
-        this.firebaseStorageService = firebaseStorageService;
     }
 
     // ================= CREATE PROPERTY =================
@@ -91,6 +89,44 @@ public class PropertyServiceImpl implements PropertyService {
 
         return response;
     }
+    
+    
+    public List<PropertyResponse> getAllProperties() {
+        return propertyRepository.findAll()
+                .stream()
+                .map(this::mapToPropertyResponse)
+                .toList();
+    }
+    
+    private PropertyResponse mapToPropertyResponse(Property property) {
+
+        PropertyResponse response = new PropertyResponse();
+
+        response.setPropertyId(property.getPropertyId());
+        response.setTitle(property.getTitle());
+        response.setDescription(property.getDescription());
+        response.setPrice(property.getPrice());
+        response.setCity(property.getCity());
+        response.setState(property.getState());
+        response.setPincode(property.getPincode());
+        response.setPropertyType(property.getPropertyType());
+        response.setStatus(property.getStatus());
+        response.setCreatedAt(property.getCreatedAt());
+
+        // seller info
+        response.setSellerId(property.getSeller().getUserId());
+        response.setSellerName(property.getSeller().getName());
+
+        // images
+        response.setImages(
+            property.getImages()
+                    .stream()
+                    .map(PropertyImage::getImageUrl)
+                    .toList()
+        );
+
+        return response;
+    }
 
     // ================= UPDATE PROPERTY =================
     @Override
@@ -129,25 +165,7 @@ public class PropertyServiceImpl implements PropertyService {
         propertyRepository.delete(property);
     }
 
-    // ================= UPLOAD PROPERTY IMAGES =================
-    @Override
-    public void uploadPropertyImages(Long propertyId, MultipartFile[] files) {
-
-        Property property = propertyRepository.findById(propertyId)
-                .orElseThrow(() -> new RuntimeException("Property not found"));
-
-        for (MultipartFile file : files) {
-
-            String imageUrl =
-                    firebaseStorageService.uploadImage(file, propertyId);
-
-            PropertyImage image = new PropertyImage();
-            image.setImageUrl(imageUrl);
-            image.setProperty(property);
-
-            propertyImageRepository.save(image);
-        }
-    }
+    
 }
 
 
