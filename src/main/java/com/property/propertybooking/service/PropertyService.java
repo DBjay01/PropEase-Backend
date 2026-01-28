@@ -22,4 +22,8 @@ public interface PropertyService {
     
     public List<PropertyResponse> getAllProperties();
     
+ // Get all properties of a specific seller
+    List<Property> getPropertiesBySeller(Long sellerId);
+
+    
 }

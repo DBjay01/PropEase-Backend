@@ -18,6 +18,12 @@ public interface PropertyRepository extends JpaRepository<Property, Long>{
     // Search properties by title (Admin can search all properties)
     List<Property> findByTitleContainingIgnoreCase(String title);
 
+  
+ // ✅ Seller personal properties (CORRECT)
+    List<Property> findBySeller_UserId(Long sellerId);
+
+
+    
  // Custom query returning DTO without images (uses seller.userId)
     @Query("SELECT new com.property.propertybooking.dto.PropertyNoImageDto(" +
            "p.propertyId, p.title, p.description, p.price, p.city, p.state, p.pincode, " +

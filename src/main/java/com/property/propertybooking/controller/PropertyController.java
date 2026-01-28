@@ -83,6 +83,25 @@ public class PropertyController {
         return ResponseEntity.ok(urls);
     }
     
+    
+    
+    
+ // 🔹 Seller personal properties
+    @GetMapping("/seller/{sellerId}")
+    public ResponseEntity<List<Property>> getSellerProperties(
+            @PathVariable Long sellerId) {
+
+        return ResponseEntity.ok(
+                propertyService.getPropertiesBySeller(sellerId)
+        );
+    }
+
+    
+    
+    
+    
+    
+    
 //    @PostMapping("/{propertyId}/images")
 //    public ResponseEntity<String> uploadImages(
 //            @PathVariable Long propertyId,
