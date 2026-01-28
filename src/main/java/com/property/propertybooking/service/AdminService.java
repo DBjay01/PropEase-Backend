@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.property.propertybooking.dto.AdminStatsResponse;
+import com.property.propertybooking.dto.PropertyNoImageDto;
 import com.property.propertybooking.entity.Property;
 import com.property.propertybooking.entity.PropertyStatus;
 import com.property.propertybooking.entity.Role;
@@ -64,6 +65,12 @@ public class AdminService {
 
         // Otherwise return all properties
         return propertyRepository.findAll();
+    }
+    
+
+    
+    public List<PropertyNoImageDto> getAllPropertiesWithoutImages() {
+        return propertyRepository.findAllWithoutImages();
     }
 
     // 3️⃣ Admin can force update property status
