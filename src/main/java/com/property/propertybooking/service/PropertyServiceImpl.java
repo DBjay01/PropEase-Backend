@@ -165,6 +165,15 @@ public class PropertyServiceImpl implements PropertyService {
         propertyRepository.delete(property);
     }
 
+	
+    
+	// Get all properties of a seller
+    public List<Property> getPropertiesBySeller(Long sellerId) {
+    	return propertyRepository.findBySeller_UserId(sellerId);
+
+    }
+
+
     
 }
 
