@@ -7,5 +7,6 @@ import lombok.Setter;
 @Setter
 public class EnquiryCreateRequestDto {
     private Long propertyId;
+    private Long userId;
     private String message;
 }

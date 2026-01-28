@@ -23,17 +23,17 @@ public class EnquiryController {
     // API 1: Create Enquiry
     
     @PostMapping
-    public ResponseEntity<Enquiry> createEnquiry(
+    public ResponseEntity<String> createEnquiry(
             @RequestBody EnquiryCreateRequestDto dto) {
 
         // TEMPORARY buyerId 
-        Long buyerId = 1L;
+        Long buyerId = dto.getUserId();
 
         Enquiry enquiry = enquiryService.createEnquiry(buyerId, dto);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(enquiry);
+                .body("Enquiry created");
     }
     
       // API 2: Get All Enquiries

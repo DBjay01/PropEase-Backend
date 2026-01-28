@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.property.propertybooking.dto.AdminStatsResponse;
 import com.property.propertybooking.dto.ForceStatusRequest;
+import com.property.propertybooking.dto.PropertyNoImageDto;
 import com.property.propertybooking.entity.Property;
 import com.property.propertybooking.service.AdminService;
 
@@ -26,21 +27,27 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    // 1️⃣ Dashboard stats API
+    // 1️ Dashboard stats API
     @GetMapping("/stats")
     public ResponseEntity<AdminStatsResponse> getStats() {
         return ResponseEntity.ok(adminService.getStats());
     }
 
-    // 2️⃣ Get all properties (with optional search)
+    // 2️ Get all properties (with optional search)
     @GetMapping("/properties")
     public ResponseEntity<List<Property>> getAllProperties(
             @RequestParam(required = false) String search) {
 
         return ResponseEntity.ok(adminService.getAllProperties(search));
     }
+    
 
-    // 3️⃣ Force update property status
+    @GetMapping("/properties/no-images")
+    public ResponseEntity<List<PropertyNoImageDto>> getAllPropertiesNoImages() {
+        return ResponseEntity.ok(adminService.getAllPropertiesWithoutImages());
+    }
+
+    // 3️ Force update property status
     @PutMapping("/properties/{id}/force-status")
     public ResponseEntity<Property> forceStatus(
             @PathVariable Long id,
