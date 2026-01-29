@@ -106,6 +106,15 @@ public class EnquiryService {
          // Delete enquiry
          enquiryRepository.delete(enquiry);
      }
+     
+     // Count enquiries for one property
+     public long getEnquiryCountByPropertyId(Long propertyId) {
+         return enquiryRepository.countByProperty_PropertyId(propertyId);
+     }
 
+     // Count enquiries for all properties of seller
+     public long getTotalEnquiryCountBySeller(Long sellerId) {
+         return enquiryRepository.countAllEnquiriesBySellerId(sellerId);
+     }
 
 }

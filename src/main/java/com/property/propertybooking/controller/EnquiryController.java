@@ -1,6 +1,7 @@
 package com.property.propertybooking.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -87,4 +88,25 @@ public class EnquiryController {
 
    return ResponseEntity.noContent().build(); 
  }
+   
+
+
+   // 1️⃣ Enquiry count for a specific property
+   @GetMapping("/property/{propertyId}/count")
+   public ResponseEntity<Map<String, Long>> getEnquiryCountByProperty(
+           @PathVariable Long propertyId) {
+
+       long count = enquiryService.getEnquiryCountByPropertyId(propertyId);
+       return ResponseEntity.ok(Map.of("count", count));
+   }
+
+   // 2️⃣ Total enquiry count for seller's all properties
+   @GetMapping("/seller/{sellerId}/total-count")
+   public ResponseEntity<Map<String, Long>> getTotalEnquiryCountBySeller(
+           @PathVariable Long sellerId) {
+
+       long totalCount = enquiryService.getTotalEnquiryCountBySeller(sellerId);
+       return ResponseEntity.ok(Map.of("totalCount", totalCount));
+   }
 }
+
