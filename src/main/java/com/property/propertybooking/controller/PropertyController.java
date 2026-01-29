@@ -18,24 +18,32 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.property.propertybooking.dto.PropertyRequest;
 import com.property.propertybooking.dto.PropertyResponse;
+import com.property.propertybooking.dto.PropertyViewRequest;
+import com.property.propertybooking.dto.PropertyViewsCountDto;
+import com.property.propertybooking.dto.PropertyWithImageDto;
 import com.property.propertybooking.entity.Property;
+import com.property.propertybooking.entity.PropertyViews;
 import com.property.propertybooking.service.PropertyImageService;
 import com.property.propertybooking.service.PropertyService;
+import com.property.propertybooking.service.ViewService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/properties")
 @CrossOrigin(origins = "http://localhost:3000")
+@RequiredArgsConstructor
 public class PropertyController {
 
     private final PropertyService propertyService;
     private final PropertyImageService imageService;
+    private final ViewService viewService;
 
-    public PropertyController(PropertyService propertyService , PropertyImageService imageService) {
-        this.propertyService = propertyService;
-        this.imageService = imageService;
-    }
+//    public PropertyController(PropertyService propertyService , PropertyImageService imageService) {
+//        this.propertyService = propertyService;
+//        this.imageService = imageService;
+//    }
 
     // CREATE PROPERTY
     @PostMapping
@@ -86,9 +94,9 @@ public class PropertyController {
     
     
     
- // 🔹 Seller personal properties
+ // Seller personal properties
     @GetMapping("/seller/{sellerId}")
-    public ResponseEntity<List<Property>> getSellerProperties(
+    public ResponseEntity<List<PropertyWithImageDto>> getSellerProperties(
             @PathVariable Long sellerId) {
 
         return ResponseEntity.ok(
@@ -96,12 +104,26 @@ public class PropertyController {
         );
     }
 
+    @PostMapping("/view")
+    public ResponseEntity<String> addView(
+            @RequestBody PropertyViewRequest request) {
+
+        PropertyViews saved = viewService.addView(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("view saved: " + saved.getId());
+    }
+
+    @GetMapping("/{propertyId}/views")
+        public ResponseEntity<List<PropertyViews>> getViewsForProperty(@PathVariable Long propertyId) {
+            List<PropertyViews> views = viewService.getViewsByPropertyId(propertyId);
+            return ResponseEntity.ok(views);
+        }
     
-    
-    
-    
-    
-    
+    @GetMapping("/sellers/{sellerId}/viewsCount")
+        public ResponseEntity<List<PropertyViewsCountDto>> getViewsCountForSeller(@PathVariable Long sellerId) {
+            List<PropertyViewsCountDto> counts = viewService.getViewsCountForSeller(sellerId);
+            return ResponseEntity.ok(counts);
+        }
 //    @PostMapping("/{propertyId}/images")
 //    public ResponseEntity<String> uploadImages(
 //            @PathVariable Long propertyId,

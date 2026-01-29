@@ -3,11 +3,13 @@ package com.property.propertybooking.service;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.property.propertybooking.dto.PropertyRequest;
 import com.property.propertybooking.dto.PropertyResponse;
+import com.property.propertybooking.dto.PropertyWithImageDto;
 import com.property.propertybooking.entity.Property;
 import com.property.propertybooking.entity.PropertyImage;
 import com.property.propertybooking.entity.PropertyStatus;
@@ -161,15 +163,16 @@ public class PropertyServiceImpl implements PropertyService {
 
         Property property = propertyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Property not found"));
-
         propertyRepository.delete(property);
     }
 
 	
     
 	// Get all properties of a seller
-    public List<Property> getPropertiesBySeller(Long sellerId) {
-    	return propertyRepository.findBySeller_UserId(sellerId);
+    public List<PropertyWithImageDto> getPropertiesBySeller(Long sellerId) {
+    	
+
+    	return propertyRepository.findBySeller_WithSingleImageDto(sellerId);
 
     }
 

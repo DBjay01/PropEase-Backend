@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Getter
 @Setter
 @Entity
@@ -53,6 +55,7 @@ public class Property {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "property")
+    @JsonIgnoreProperties("property")
     private List<PropertyImage> images;
 
 }

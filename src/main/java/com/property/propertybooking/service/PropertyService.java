@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.property.propertybooking.dto.PropertyRequest;
 import com.property.propertybooking.dto.PropertyResponse;
+import com.property.propertybooking.dto.PropertyWithImageDto;
 import com.property.propertybooking.entity.Property;
 
 public interface PropertyService {
@@ -23,7 +24,7 @@ public interface PropertyService {
     public List<PropertyResponse> getAllProperties();
     
  // Get all properties of a specific seller
-    List<Property> getPropertiesBySeller(Long sellerId);
+    List<PropertyWithImageDto> getPropertiesBySeller(Long sellerId);
 
     
 }
