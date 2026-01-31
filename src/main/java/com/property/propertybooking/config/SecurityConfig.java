@@ -50,9 +50,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
                 // URL-based restrictions:
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/seller/**", "/api/properties/seller/**").hasRole("SELLER")
-               .requestMatchers("/api/buyer/**", "/api/views/**").hasRole("BUYER")
+            //     .requestMatchers("/api/admin/**").hasRole("ADMIN")
+            //     .requestMatchers("/api/seller/**", "/api/properties/seller/**").hasRole("SELLER")
+            //    .requestMatchers("/api/buyer/**", "/api/views/**").hasRole("BUYER")
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
